@@ -25,7 +25,7 @@ def loop():
         telemetry = json.dumps({'temperature' : temp_C})
         print("Sending telemetry ", telemetry)
         mqtt_client.publish(client_telemetry_topic, telemetry)
-        time.sleep(5)
+        time.sleep(3)
 
 if __name__ == '__main__':
     print("Press Ctrl+C to quit")
