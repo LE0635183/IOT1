@@ -28,8 +28,12 @@ def loop():
         time.sleep(3)
 
 if __name__ == '__main__':
-    print("Press Ctrl+C to quit")
     try:
-        loop()
+        print("Press Ctrl+C to stop the MQTT client.")
+        while True:
+            time.sleep(2)
     except KeyboardInterrupt:
-        print("\n Exiting program.")
+        print("\nStopping MQTT client...")
+        mqtt_client.loop_stop()
+        mqtt_client.disconnect()
+        print("MQTT client stopped. Exiting.")
