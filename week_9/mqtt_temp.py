@@ -1,9 +1,8 @@
 from gpiozero import LED
 import time
-import random
 import paho.mqtt.client as mqtt
 import json
-from temperature import read_temperature, setup
+import temperature
 
 red = LED(17)
 id = '67e6ce38-537b-414e-875f-f0cbc009ee63'
@@ -17,13 +16,20 @@ mqtt_client.loop_start()
 
 print("MQTT connected!")
 
-while True:
-    
-    
-    temperature = read_temperature(setup) #replace with actual readings from your sensor
-    
-    
-    telemetry = json.dumps({'temperature' : temperature})
-    print("Sending telemetry ", telemetry)
-    mqtt_client.publish(client_telemetry_topic, telemetry)
-    time.sleep(5)
+def loop():
+    while True:
+        device_file = temperature.setup()  
+        read_temperature = temperature.read_temperature(device_file) #replace with actual readings from your sensor
+        temp_C= read_temperature[0]
+        
+        telemetry = json.dumps({'temperature' : temp_C})
+        print("Sending telemetry ", telemetry)
+        mqtt_client.publish(client_telemetry_topic, telemetry)
+        time.sleep(5)
+
+if __name__ == '__main__':
+    print("Press Ctrl+C to quit")
+    try:
+        loop()
+    except KeyboardInterrupt:
+        print("\n Exiting program.")
